@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@theme{
+    --color-*:initial;
+    --color-primary: #5051F9;
+    --color-secondary-purple: #C9B3ED;
+    --color-secondary-blue: #92BFFF;
+    --color-secondary-indigo: #9F9FF8;
+    --color-secondary-cyan: #AEC7ED;
+    --color-secondary-mint: #96E2D6;
+    --color-secondary-yellow: #FFDB56;
+    --color-secondary-orange: #FFB55B;
+    --color-secondary-red: #FF4747;
+    --color-secondary-green: #94E9B8;
+    --color-background-1: #FFFFFF;
+    --color-background-2: #F9F9FA;
+    --color-background-3: #E6F1FD;
+    --color-background-4: #EDEEFC;
+    --color-background-5: #FFFFFFD9;
+    --color-logo: #5F6388;
+    --color-black-100: #000000;
+    --color-black-80: #000000D9;
+    --color-black-60: #00000099;
+    --color-black-40: #00000066;
+    --color-black-20: #00000033;
+    --color-black-10: #0000001A;
+    --color-black-4: #0000000A;
+    --color-white-100: #FFFFFF;
+    --color-white-80: #FFFFFFD9;
+    --color-white-60: #FFFFFF99;
+    --color-white-40: #FFFFFF66;
+    --color-white-20: #FFFFFF33;
+    --color-white-10: #FFFFFF1A;
+    --color-white-4: #FFFFFF0A;
+    --color-info: #3ABFF8;
+    --color-success: #36D399;
+    --color-warning: #FBBD23;
+    --color-error: #F87272;
+    --color-font-color: #232360;
+    --color-dark-background-1: #2A2A2A;
+    --color-dark-background-2: #FFFFFF0A;
+    --color-dark-background-3: #E6F1FD;
+    --color-dark-background-4: #EDEEFC;
+    --color-dark-background-5: #0000001A;
+    --color-dark-logo: #A3A3C2;
+    --color-dark-white-100: #000000;
+    --color-dark-white-80: #000000D9;
+    --color-dark-white-60: #00000099;
+    --color-dark-white-40: #00000066;
+    --color-dark-white-20: #00000033;
+    --color-dark-white-10: #0000001A;
+    --color-dark-white-4: #0000000A;
+    --color-dark-black-100: #FFFFFF;
+    --color-dark-black-80: #FFFFFFD9;
+    --color-dark-black-60: #FFFFFF99;
+    --color-dark-black-40: #FFFFFF66;
+    --color-dark-black-20: #FFFFFF33;
+    --color-dark-black-10: #FFFFFF1A;
+    --color-dark-black-4: #FFFFFF0A;
+    --color-dark-info: #1E90FF;
+    --color-dark-success: #28A745;
+    --color-dark-warning: #FFC107;
+    --color-dark-error: #DC3545;
+    --color-dark-font-color: #E1E3E7;
+    --font-*:initial;
+    --font-family-sans: "Poppins", sans-serif;
+    --font-weight-*:initial;
+    --font-weight-thin: 100;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    --text-*:initial;
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-md: 16px;
+    --text-lg: 18px;
+    --text-xl: 24px;
+    --text-2xl: 32px;
+    --text-3xl: 48px;
+    --text-4xl: 64px;
+    --shadow-*:initial;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-none: none;
+    --blur-*:initial;
+    --blur-sm: 4px;
+    --blur-md: 8px;
+    --blur-lg: 12px;
+    --blur-xl: 16px;
+    --blur-2xl: 24px;
+    --spacing-*:initial;
+    --spacing-0: 0px;
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-8: 28px;
+    --spacing-10: 32px;
+    --spacing-12: 40px;
+    --spacing-16: 48px;
+    --spacing-20: 80px;
+    --radius-*:initial;
+    --radius-0: 0px;
+    --radius-1: 4px;
+    --radius-2: 8px;
+    --radius-3: 12px;
+    --radius-4: 16px;
+    --radius-5: 20px;
+    --radius-6: 24px;
+    --radius-8: 28px;
+    --radius-10: 32px;
+    --radius-12: 40px;
+    --radius-16: 48px;
+    --radius-20: 80px;
+}
+
+@layer base {
+    .icon-size-0{
+        width: 0;
+        height: 0;
+    }
+    .icon-size-1{
+        width: 4px;
+        height: 4px;
+    }
+    .icon-size-2{
+        width: 8px;
+        height: 8px;
+    }
+    .icon-size-3{
+        width: 12px;
+        height: 12px;
+    }
+    .icon-size-4{
+        width: 16px;
+        height: 16px;
+    }
+    .icon-size-5{
+        width: 20px;
+        height: 20px;
+    }
+    .icon-size-6{
+        width: 24px;
+        height: 24px;
+    }
+    .icon-size-8{
+        width: 28px;
+        height: 28px;
+    }
+    .icon-size-10{
+        width: 32px;
+        height: 32px;
+    }
+    .icon-size-12{
+        width: 40px;
+        height: 40px;
+    }
+    .icon-size-16{
+        width: 48px;
+        height: 48px;
+    }
+    .icon-size-20{
+        width: 80px;
+        height: 80px;
+    }
+}
