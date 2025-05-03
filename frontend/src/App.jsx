@@ -1,11 +1,10 @@
 import React from "react"
-import Sidebar from "./components/Sidebar/Sidebar"
-
+import Overview from "./pages/Overview"
 
 const App = () => {
   return (
-    <main className="App">
-      <Sidebar/>
+    <main className="App font-family-sans">
+      <Overview/>
     </main>
   )
 }
