@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { logo } from "../../constants/images";
 import SidebarItem from "./SidebarItem";
 import {
@@ -12,17 +12,19 @@ import {
   SquareActivity,
 } from "lucide-react";
 export const SidebarContext = createContext();
-
 import React, { useEffect } from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ onToggle }) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleMouseHover = () => {
     setExpanded(true);
+    onToggle(true);
   };
+
   const handleMouseLeave = () => {
     setExpanded(false);
+    onToggle(false);
   };
 
   useEffect(() => {
@@ -39,14 +41,14 @@ const Sidebar = () => {
   return (
     <aside
       className={`sidebar h-screen transition-all duration-300 ${
-        expanded ? "w-[280px]" : "w-fit"
+        expanded ? "w-[260px]" : "w-[64px]"
       }`}
     >
-      <nav className="pl-4 pr-4 pt-8 pb-8 h-full flex flex-col justify-between items-stretch bg-background-1 border-black-10">
+      <nav className="pl-4 pr-4 pt-8 pb-8 h-full flex flex-col justify-between items-stretch bg-(--color-background-1) border-black-10">
         <img
           src={logo}
           className={`overflow-hidden transition-all ${
-            expanded ? "icon-size-80" : "icon-size-32"
+            expanded ? "icon-size-80" : "icon-size-40"
           }`}
           alt="logo"
         />
@@ -77,10 +79,10 @@ const Sidebar = () => {
           `}
             >
               <div className="flex flex-col ">
-                <h4 className="font-family-sans font-normal text-14 text-black-80">
+                <h4 className="font-family-sans font-normal text-12 text-(--color-black-80)">
                   Zohaib Hassan
                 </h4>
-                <span className="font-family-sans font-normal text-14 text-black-40">
+                <span className="font-family-sans font-normal text-12 text-(--color-black-40)">
                   zhassan2312@gmail.com
                 </span>
               </div>

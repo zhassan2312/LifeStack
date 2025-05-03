@@ -12,8 +12,8 @@ const SidebarItem = ({ icon, text, active, alert }) => {
           transition-colors group p-12 rounded-12 mr-8
           ${
             active
-              ? "bg-primary text-white-100"
-              : "hover:bg-hover-primary text-font-color"
+              ? "bg-(--color-primary) text-(--color-white-100)"
+              : "hover:bg-(--color-hover-primary) text-(--color-font-color)"
           }
       `}
       >
