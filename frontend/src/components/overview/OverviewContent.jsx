@@ -1,7 +1,7 @@
-import React from 'react'
-import CompareChart from './CompareChart'
-import OverviewTaskList from './OverviewTaskList'
-import OverviewProjectList from './OverviewProjectList'
+
+import CompareChart from '../CompareChart'
+import TaskList from '../TaskList'
+import ProjectList from '../ProjectList'
 import OverviewRightbar from './OverviewRightbar'
 
 const data=[
@@ -22,10 +22,10 @@ const data=[
 const OverviewContent = () => {
   
   return (
-    <div className='flex flex-row gap-24 h-screen'>
-      <div className='mt-24 ml-24 mb-24  flex flex-col gap-24 flex-1'>
+    <div>
+      <div className='mt-24 ml-24 mb-24 flex flex-col gap-24 flex-1 mr-[360px]'>
         <div className='flex gap-24'>
-          <div className='flex flex-col gap-16'>
+          <div className='flex flex-col gap-16 flex-1'>
             <CompareChart 
                 data={data} 
                 title={"Income vs Expenses ($)"}
@@ -35,9 +35,9 @@ const OverviewContent = () => {
               title={"Calorie Intake vs Burn (kcal)"}
             />
           </div>
-          <OverviewTaskList/>
+          <TaskList className={'p-16 max-h-[662px]'}/>
         </div>
-        <OverviewProjectList/>
+        <ProjectList/>
 
       </div>
       <OverviewRightbar/>

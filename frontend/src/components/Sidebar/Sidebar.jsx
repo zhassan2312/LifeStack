@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { logo } from "../../constants/images";
 import SidebarItem from "./SidebarItem";
 import {
@@ -11,11 +11,14 @@ import {
   CircleDollarSign,
   SquareActivity,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
+
 export const SidebarContext = createContext();
-import React, { useEffect } from "react";
 
 const Sidebar = ({ onToggle }) => {
   const [expanded, setExpanded] = useState(false);
+  const location = useLocation();
+  const [activePath, setActivePath] = useState(location.pathname);
 
   const handleMouseHover = () => {
     setExpanded(true);
@@ -38,6 +41,10 @@ const Sidebar = ({ onToggle }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
+
   return (
     <aside
       className={`sidebar h-screen transition-all duration-300 ${
@@ -55,13 +62,48 @@ const Sidebar = ({ onToggle }) => {
 
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex flex-col gap-4">
-            <SidebarItem icon={<LayoutDashboard size={20} />} text="Overview" alert />
-            <SidebarItem icon={<FolderKanban size={20} />} text="Projects" active />
-            <SidebarItem icon={<ListTodo size={20} />} text="Tasks" />
-            <SidebarItem icon={<CircleDollarSign size={20} />} text="Expense" />
-            <SidebarItem icon={<MessageSquare size={20} />} text="Chat" alert />
-            <SidebarItem icon={<SquareActivity size={20} />} text="Fitness" />
-            <SidebarItem icon={<Settings size={20} />} text="Settings" />
+            <SidebarItem
+              icon={<LayoutDashboard size={20} />}
+              text="Overview"
+              path="/Overview"
+              active={activePath === "/Overview"}
+              setActivePath={setActivePath}
+            />
+            <SidebarItem
+              icon={<ListTodo size={20} />}
+              text="Tasks"
+              path="/tasks"
+              active={activePath === "/tasks"}
+              setActivePath={setActivePath}
+            />
+            <SidebarItem
+              icon={<CircleDollarSign size={20} />}
+              text="Expense"
+              path="/expense"
+              active={activePath === "/expense"}
+              setActivePath={setActivePath}
+            />
+            <SidebarItem
+              icon={<MessageSquare size={20} />}
+              text="Chat"
+              path="/chat"
+              active={activePath === "/chat"}
+              setActivePath={setActivePath}
+            />
+            <SidebarItem
+              icon={<SquareActivity size={20} />}
+              text="Fitness"
+              path="/fitness"
+              active={activePath === "/fitness"}
+              setActivePath={setActivePath}
+            />
+            <SidebarItem
+              icon={<Settings size={20} />}
+              text="Settings"
+              path="/settings"
+              active={activePath === "/settings"}
+              setActivePath={setActivePath}
+            />
           </ul>
         </SidebarContext.Provider>
 
@@ -72,13 +114,8 @@ const Sidebar = ({ onToggle }) => {
             className="icon-size-28 mt-auto mb-auto rounded-md"
           />
           {expanded && (
-            <div
-              className={`
-              flex justify-between items-center
-              overflow-hidden gap-16 transition-all
-          `}
-            >
-              <div className="flex flex-col ">
+            <div className="flex justify-between items-center overflow-hidden gap-16 transition-all">
+              <div className="flex flex-col">
                 <h4 className="font-family-sans font-normal text-12 text-(--color-black-80)">
                   Zohaib Hassan
                 </h4>

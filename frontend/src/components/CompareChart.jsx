@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,30 +10,29 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+const CompareChart = ({ data, title }) => {
+  const [isDaily, setIsDaily] = useState(true);
+  const [isWeekly, setIsWeekly] = useState(false);
+  const [isMonthly, setIsMonthly] = useState(false);
 
-const CompareChart = ({data,title}) => {
+  const handleDailyClick = () => {
+    setIsDaily(true);
+    setIsWeekly(false);
+    setIsMonthly(false);
+  };
 
-    const [isDaily, setIsDaily] = useState(true);
-    const [isWeekly, setIsWeekly] = useState(false);
-    const [isMonthly, setIsMonthly] = useState(false);
-  
-    const handleDailyClick = () => {
-      setIsDaily(true);
-      setIsWeekly(false);
-      setIsMonthly(false);
-    };
-  
-    const handleWeeklyClick = () => {
-      setIsDaily(false);
-      setIsWeekly(true);
-      setIsMonthly(false);
-    };
-  
-    const handleMonthlyClick = () => {
-      setIsDaily(false);
-      setIsWeekly(false);
-      setIsMonthly(true);
-    };
+  const handleWeeklyClick = () => {
+    setIsDaily(false);
+    setIsWeekly(true);
+    setIsMonthly(false);
+  };
+
+  const handleMonthlyClick = () => {
+    setIsDaily(false);
+    setIsWeekly(false);
+    setIsMonthly(true);
+  };
+
   return (
     <div className="bg-(--color-background-1) pr-24 pt-24 pb-16 rounded-24">
       <div className="ml-32 mb-16 flex justify-between items-stretch">
@@ -42,7 +41,9 @@ const CompareChart = ({data,title}) => {
           <button
             onClick={handleDailyClick}
             className={`font-normal cursor-pointer ${
-              isDaily ? "underline text-(--color-secondary-blue)" : "text-(--color-black-60)"
+              isDaily
+                ? "underline text-(--color-secondary-blue)"
+                : "text-(--color-black-60)"
             }`}
           >
             Daily
@@ -50,7 +51,9 @@ const CompareChart = ({data,title}) => {
           <button
             onClick={handleWeeklyClick}
             className={`font-normal cursor-pointer ${
-              isWeekly ? "underline text-(--color-secondary-blue)" : "text-(--color-black-60)"
+              isWeekly
+                ? "underline text-(--color-secondary-blue)"
+                : "text-(--color-black-60)"
             }`}
           >
             Weekly
@@ -58,19 +61,21 @@ const CompareChart = ({data,title}) => {
           <button
             onClick={handleMonthlyClick}
             className={`font-normal cursor-pointer ${
-              isMonthly ? "underline text-(--color-secondary-blue)" : "text-(--color-black-60)"
+              isMonthly
+                ? "underline text-(--color-secondary-blue)"
+                : "text-(--color-black-60)"
             }`}
           >
             Monthly
           </button>
         </div>
       </div>
-      <div className="w-[580px] h-[240px]">
-        <ResponsiveContainer>
+      <div className="w-full h-[240px]"> {/* Adjusted width to be fully responsive */}
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
-              dataKey={"name"} 
+              dataKey={"name"}
               tick={{ fontSize: 12 }}
               axisLine={false}
               tickLine={false}
@@ -83,8 +88,18 @@ const CompareChart = ({data,title}) => {
               padding={{ top: 16, bottom: 16 }}
             />
             <Tooltip />
-            <Area type="monotone" dataKey="compare1" stroke="#8AE6B0" fill="#8AE6B022" />
-            <Area type="monotone" dataKey="compare2" stroke="#FF5A5F" fill="#FF5A5F22" />
+            <Area
+              type="monotone"
+              dataKey="compare1"
+              stroke="#8AE6B0"
+              fill="#8AE6B022"
+            />
+            <Area
+              type="monotone"
+              dataKey="compare2"
+              stroke="#FF5A5F"
+              fill="#FF5A5F22"
+            />
             <Line
               type="monotone"
               dataKey="compare1"
