@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 /* Light Theme */
 :root {
     --color-primary: #5051F9;
@@ -147,6 +146,12 @@
 }
 
 @layer base {
+    :root{
+        font-family: "Poppins", sans-serif;
+    }
+    body {
+        font-family: "Poppins", sans-serif;
+        }
     .icon-size-0{
         width: 0;
         height: 0;
@@ -195,7 +200,25 @@
         width: 80px;
         height: 80px;
     }
-    body {
-        font-family: var(--font-family-sans);
-      }
+    .timeline-container {
+        position: relative;
+        height: 100px; /* Adjust height as needed */
+        }
+
+        .timeline-container .relative {
+        position: relative;
+        height: 60px; /* Adjust height for tasks */
+        }
+
+        .timeline-container .absolute {
+        position: absolute;
+        top: 0;
+        height: 40px; /* Adjust task height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        }
 }
