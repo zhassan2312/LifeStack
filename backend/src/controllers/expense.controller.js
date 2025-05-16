@@ -124,25 +124,18 @@ export const getPast10DaysData = async (req, res) => {
     try {
         const result = await sql.query(
             `SELECT 
-                TO_CHAR(expense_time, 'YYYY-MM-DD') AS day,
-                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS total_income,
-                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS total_expense
+                TO_CHAR(expense_time, 'YYYY-MM-DD') AS name,
+                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS income,
+                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS expense
              FROM expenses
              WHERE expense_time >= CURRENT_DATE - INTERVAL '10 days' AND user_id = $1
-             GROUP BY day
-             ORDER BY day ASC`,
+             GROUP BY name
+             ORDER BY name ASC`,
             [user_id]
         );
 
-        console.log(result);
 
-        const formattedData = result.map((row, index) => ({
-            name: `Day ${index + 1}`,
-            compare1: row.total_income,
-            compare2: row.total_expense,
-        }));
-
-        res.status(200).json(formattedData);
+        res.status(200).json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to fetch data for the past 10 days' });
@@ -154,23 +147,17 @@ export const getPast10WeeksData = async (req, res) => {
     try {
         const result = await sql.query(
             `SELECT 
-                TO_CHAR(DATE_TRUNC('week', expense_time), 'YYYY-WW') AS week,
-                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS total_income,
-                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS total_expense
+                TO_CHAR(DATE_TRUNC('week', expense_time), 'YYYY-WW') AS name,
+                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS income,
+                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS expense
              FROM expenses
              WHERE expense_time >= CURRENT_DATE - INTERVAL '10 weeks' AND user_id = $1
-             GROUP BY week
-             ORDER BY week ASC`,
+             GROUP BY name
+             ORDER BY name ASC`,
             [user_id]
         );
 
-        const formattedData = result.map((row, index) => ({
-            name: `Week ${index + 1}`,
-            compare1: row.total_income,
-            compare2: row.total_expense,
-        }));
-
-        res.status(200).json(formattedData);
+        res.status(200).json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to fetch data for the past 10 weeks' });
@@ -182,23 +169,17 @@ export const getPast10MonthsData = async (req, res) => {
     try {
         const result = await sql.query(
             `SELECT 
-                TO_CHAR(DATE_TRUNC('month', expense_time), 'YYYY-MM') AS month,
-                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS total_income,
-                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS total_expense
+                TO_CHAR(DATE_TRUNC('month', expense_time), 'YYYY-MM') AS name,
+                SUM(CASE WHEN expense_type = 'income' THEN amount ELSE 0 END) AS income,
+                SUM(CASE WHEN expense_type = 'expense' THEN amount ELSE 0 END) AS expense
              FROM expenses
              WHERE expense_time >= CURRENT_DATE - INTERVAL '10 months' AND user_id = $1
-             GROUP BY month
-             ORDER BY month ASC`,
+             GROUP BY name
+             ORDER BY name ASC`,
             [user_id]
         );
 
-        const formattedData = result.map((row, index) => ({
-            name: `Month ${index + 1}`,
-            compare1: row.total_income,
-            compare2: row.total_expense,
-        }));
-
-        res.status(200).json(formattedData);
+        res.status(200).json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to fetch data for the past 10 months' });

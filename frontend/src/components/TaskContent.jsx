@@ -1,40 +1,49 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Card from "./Card";
 import { Circle, CircleAlert, CircleCheckBig, LayoutList, ListChecks, Logs } from "lucide-react";
 import Topbar from "./Topbar";
-import CompareChart from "./CompareChart";
+import CompletedTotalChart from "./CompletedTotalChart";
 import ProjectList from "./ProjectList";
 import TaskList from "./TaskList";
 import CreateProject from "./CreateProject";
 import CreateTask from "./CreateTask";
 import ProjectBoard from "./ProjectBoard";
-
-const tasks = [
-  { title: "Morning Meeting", startHour: 9, endHour: 10 },
-  { title: "Work on Project A", startHour: 11, endHour: 13 },
-  { title: "Lunch Break", startHour: 13, endHour: 14 },
-  { title: "Team Sync", startHour: 15, endHour: 16 },
-  { title: "Wrap-up", startHour: 17, endHour: 18 },
-];
-
-const data = [
-  { name: "Jan", compare1: 4000, compare2: 2400 },
-  { name: "Feb", compare1: 3000, compare2: 1398 },
-  { name: "Mar", compare1: 2000, compare2: 9800 },
-  { name: "Apr", compare1: 2780, compare2: 3908 },
-  { name: "May", compare1: 1890, compare2: 4800 },
-  { name: "Jun", compare1: 2390, compare2: 3800 },
-  { name: "Jul", compare1: 3490, compare2: 4300 },
-  { name: "Aug", compare1: 4000, compare2: 2400 },
-  { name: "Sep", compare1: 3000, compare2: 1398 },
-  { name: "Oct", compare1: 2000, compare2: 9800 },
-  { name: "Nov", compare1: 2780, compare2: 3908 },
-  { name: "Dec", compare1: 1890, compare2: 4800 },
-];
+// import { useTaskStore } from "../store/useTaskStore";
+// import { useProjectStore } from "../store/useProjectStore";
 
 const TaskContent = () => {
   const [activeTab, setActiveTab] = useState("Dashboard"); // State to track the active tab
 
+  //   const {
+  //   totalTaskNumberToday,
+  //   completedTaskNumberToday,
+  //   pendingTaskNumberToday,
+  //   getTotalTaskNumberToday,
+  //   getCompletedTaskNumberToday,
+  //   getPendingTaskNumberToday,
+  // } = useTaskStore();
+
+  // // Project stats
+  // const {
+  //   totalProjects,
+  //   completedProjects,
+  //   pendingProjects,
+  //   getTotalProjectNumber,
+  //   getCompletedProjectNumber,
+  //   getPendingProjectNumber,
+  // } = useProjectStore();
+
+  // // Fetch stats on mount
+  // useEffect(() => {
+  //   getTotalTaskNumberToday();
+  //   getCompletedTaskNumberToday();
+  //   getPendingTaskNumberToday();
+  //   getTotalProjectNumber();
+  //   getCompletedProjectNumber();
+  //   getPendingProjectNumber();
+  //   // eslint-disable-next-line
+  // }, []);
+    
   return (
     <>
       <Topbar
@@ -57,7 +66,7 @@ const TaskContent = () => {
                 <Card title={"Completed Projects"} text={"6"} icon={<CircleCheckBig size={20} />} />
                 <Card title={"Pending Projects"} text={"4"} icon={<CircleAlert size={20} />} />
               </div>
-              <CompareChart data={data} title={"Total vs Completed Tasks"} />
+              <CompletedTotalChart title={"Total vs Completed Tasks"} />
               <ProjectList />
             </div>
           </div>

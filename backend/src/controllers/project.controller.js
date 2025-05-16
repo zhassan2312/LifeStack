@@ -44,8 +44,8 @@ export const getPendingProjectNumber = async (req, res) => {
     }
 };
 
-// Get ongoing projects (In Progress first, then Pending)
 export const getOngoingProjects = async (req, res) => {
+    const { user_id } = req.params; // Get user ID from route params
     try {
         const result = await sql.query(`
             SELECT 
@@ -74,32 +74,49 @@ export const getOngoingProjects = async (req, res) => {
             LEFT JOIN hourly_based_projects hbp ON p.project_id = hbp.project_id
             LEFT JOIN project_based_projects pbp ON p.project_id = pbp.project_id
             WHERE p.status IN ('In Progress', 'Pending')
+              AND p.user_id = $1
             ORDER BY 
                 CASE 
                     WHEN p.status = 'In Progress' THEN 1
                     WHEN p.status = 'Pending' THEN 2
                 END, 
                 p.created_at
-        `);
-
-        res.json(result.rows);
+        `, [user_id]);
+        res.json(result);
     } catch (err) {
         console.error('Error fetching ongoing projects:', err);
         res.status(500).json({ error: 'Failed to fetch ongoing projects' });
     }
 };
 
-// Create a new project
-export const createProject = async (req, res) => {
-    const { user_id, name, description, priority, image_url, status, project_type } = req.body;
-    try {
-        const result = await sql.query(`
-            INSERT INTO projects (user_id, name, description, priority, image_url, status, project_type)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *
-        `, [user_id, name, description, priority, image_url, status, project_type]);
 
-        res.status(201).json(result.rows[0]);
+export const createProject = async (req, res) => {
+    // Accept user_id from req.body (or req.params if you use it in the route)
+    const { user_id, name, description, priority, image_url, status, project_type, hourly_rate, project_rate } = req.body;
+    try {
+        const result = await sql.query(
+            `INSERT INTO projects (user_id, name, description, priority, image_url, status, project_type)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
+             RETURNING *`,
+            [user_id, name, description, priority, image_url, status, project_type]
+        );
+        // Optionally insert into hourly_based_projects or project_based_projects here
+        if (project_type === 'hourly') {
+            await sql.query(
+                `INSERT INTO hourly_based_projects (project_id, hourly_rate)
+                 VALUES ($1, $2)`,
+                [result.project_id, hourly_rate]
+            );
+        } else if (project_type === 'project_based') {
+            await sql.query(
+                `INSERT INTO project_based_projects (project_id, project_rate)
+                 VALUES ($1, $2)`,
+                [result.project_id, project_rate]
+            );
+        }
+        console.log(result);
+        // Send the created project as JSON
+        res.status(201).json({ project: result });
     } catch (err) {
         console.error('Error creating project:', err);
         res.status(500).json({ error: 'Failed to create project' });

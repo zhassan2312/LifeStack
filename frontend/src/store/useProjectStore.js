@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
+import { useAuthStore } from './useAuthStore';
 
-const BASE_URL = 'http://localhost:5000/api/projects';
+const BASE_URL = 'http://localhost:5000/api/project';
 
 export const useProjectStore = create((set, get) => ({
     totalProjects: 0,
@@ -44,26 +45,27 @@ export const useProjectStore = create((set, get) => ({
         }
     },
 
-    // Fetch ongoing projects
     getOngoingProjects: async () => {
-        set({ loading: true });
-        try {
-            const response = await axios.get(`${BASE_URL}/getOngoingProjects`);
-            set({ ongoingProjects: response.data, loading: false });
-        } catch (error) {
-            set({ error: error.message, loading: false });
-        }
-    },
+    set({ loading: true });
+    try {
+        const user_id = useAuthStore.getState().authUser.user_id; // Get user_id from auth store
+      const response = await axios.get(`${BASE_URL}/getOngoingProjects/${user_id}`);
+      set({ ongoingProjects: response.data, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
 
     // Create a new project
     createProject: async (projectData) => {
-        set({ loading: true });
+        set({ loading: true, error: null });
         try {
             const response = await axios.post(`${BASE_URL}/createProject`, projectData);
-            set({ loading: false });
             return response.data;
         } catch (error) {
-            set({ error: error.message, loading: false });
+            set({ error: error.message });
+        } finally {
+            set({ loading: false });
         }
     },
 

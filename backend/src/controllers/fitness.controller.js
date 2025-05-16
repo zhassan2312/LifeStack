@@ -63,7 +63,8 @@ export const getExcercisesForToday = async (req, res) => {
 };
 // Create a new calorie intake record
 export const createIntake = async (req, res) => {
-    const { user_id, food_item, calories, description } = req.body;
+    const { user_id } = req.params;
+    const { food_item, calories, description } = req.body;
 
     try {
         // Insert into the fitness table
@@ -73,16 +74,16 @@ export const createIntake = async (req, res) => {
             [user_id, 'intake', description, calories]
         );
 
-        const fitness_id = fitnessResult.rows[0].fitness_id;
+        const fitness_id = fitnessResult.fitness_id;
 
         // Insert into the calorie_intake table
-        const intakeResult = await sql.query(
+        await sql.query(
             `INSERT INTO calorie_intake (fitness_id, food_item) 
              VALUES ($1, $2) RETURNING *`,
             [fitness_id, food_item]
         );
 
-        res.status(201).json({ intake: intakeResult.rows[0] });
+        res.status(201);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to create calorie intake record' });
@@ -91,7 +92,8 @@ export const createIntake = async (req, res) => {
 
 // Create a new calorie burn record
 export const createBurnt = async (req, res) => {
-    const { user_id, exercise, calories, description } = req.body;
+    const { user_id } = req.params;
+    const { exercise, calories, description } = req.body;
 
     try {
         // Insert into the fitness table
@@ -101,16 +103,16 @@ export const createBurnt = async (req, res) => {
             [user_id, 'burn', description, calories]
         );
 
-        const fitness_id = fitnessResult.rows[0].fitness_id;
+        const fitness_id = fitnessResult.fitness_id;
 
         // Insert into the calorie_burn table
-        const burnResult = await sql.query(
+        await sql.query(
             `INSERT INTO calorie_burn (fitness_id, exercise) 
              VALUES ($1, $2) RETURNING *`,
             [fitness_id, exercise]
         );
 
-        res.status(201).json({ burnt: burnResult.rows[0] });
+        res.status(201);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to create calorie burn record' });
@@ -179,5 +181,72 @@ export const deleteBurnt = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to delete calorie burn record' });
+    }
+};
+
+
+// Get intake vs burn for past 10 days
+export const getPast10DaysData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(fitness_time, 'YYYY-MM-DD') AS name,
+                SUM(CASE WHEN fitness_type = 'intake' THEN calories ELSE 0 END) AS intake,
+                SUM(CASE WHEN fitness_type = 'burn' THEN calories ELSE 0 END) AS burn
+             FROM fitness
+             WHERE fitness_time >= CURRENT_DATE - INTERVAL '10 days' AND user_id = $1
+             GROUP BY name
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch fitness data for the past 10 days' });
+    }
+};
+
+// Get intake vs burn for past 10 weeks
+export const getPast10WeeksData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(DATE_TRUNC('week', fitness_time), 'YYYY-WW') AS name,
+                SUM(CASE WHEN fitness_type = 'intake' THEN calories ELSE 0 END) AS intake,
+                SUM(CASE WHEN fitness_type = 'burn' THEN calories ELSE 0 END) AS burn
+             FROM fitness
+             WHERE fitness_time >= CURRENT_DATE - INTERVAL '10 weeks' AND user_id = $1
+             GROUP BY name
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch fitness data for the past 10 weeks' });
+    }
+};
+
+// Get intake vs burn for past 10 months
+export const getPast10MonthsData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(DATE_TRUNC('month', fitness_time), 'YYYY-MM') AS name,
+                SUM(CASE WHEN fitness_type = 'intake' THEN calories ELSE 0 END) AS intake,
+                SUM(CASE WHEN fitness_type = 'burn' THEN calories ELSE 0 END) AS burn
+             FROM fitness
+             WHERE fitness_time >= CURRENT_DATE - INTERVAL '10 months' AND user_id = $1
+             GROUP BY name
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch fitness data for the past 10 months' });
     }
 };

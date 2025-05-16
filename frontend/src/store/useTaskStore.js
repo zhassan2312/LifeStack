@@ -11,6 +11,55 @@ export const useTaskStore = create((set, get) => ({
     pendingTaskNumberToday: 0,
     loading: false,
     error: null,
+    past10DaysData: [],
+    past10WeeksData: [],
+    past10MonthsData: [],
+
+
+    // Fetch data for the past 10 days
+        getPast10DaysData: async () => {
+            set({ loading: true });
+            try {
+                const user_id = useAuthStore.getState().authUser.user_id;
+                if (!user_id) {
+                    throw new Error('User ID not found');
+                }
+                const response = await axios.get(`${BASE_URL}/getPast10DaysData/${user_id}`);
+                set({ past10DaysData: response.data, loading: false });
+            } catch (error) {
+                set({ error: error.message, loading: false });
+            }
+        },
+    
+        // Fetch data for the past 10 weeks
+        getPast10WeeksData: async () => {
+            set({ loading: true });
+            try {
+                const user_id = useAuthStore.getState().authUser.user_id;
+                if (!user_id) {
+                    throw new Error('User ID not found');
+                }
+                const response = await axios.get(`${BASE_URL}/getPast10WeeksData/${user_id}`);
+                set({ past10WeeksData: response.data, loading: false });
+            } catch (error) {
+                set({ error: error.message, loading: false });
+            }
+        },
+    
+        // Fetch data for the past 10 months
+        getPast10MonthsData: async () => {
+            set({ loading: true });
+            try {
+                const user_id = useAuthStore.getState().authUser.user_id;
+                if (!user_id) {
+                    throw new Error('User ID not found');
+                }
+                const response = await axios.get(`${BASE_URL}/getPast10MonthsData/${user_id}`);
+                set({ past10MonthsData: response.data, loading: false });
+            } catch (error) {
+                set({ error: error.message, loading: false });
+            }
+        },
 
     getToDoList: async () => {
         set({ loading: true });
@@ -60,7 +109,8 @@ export const useTaskStore = create((set, get) => ({
     createTask: async (taskData) => {
         set({ loading: true });
         try {
-            const response = await axios.post(`${BASE_URL}/createTask`, taskData);
+            const user_id = useAuthStore.getState().authUser.user_id; // Get user_id from auth store
+            const response = await axios.post(`${BASE_URL}/createTask/${user_id}`, taskData); // <-- define response
             set({ loading: false });
             return response.data.task;
         } catch (error) {

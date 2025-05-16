@@ -56,6 +56,7 @@ export const getTasksForToday = async (req, res) => {
              ORDER BY start_time ASC`,
             [user_id] // Pass the user_id as a parameter
         );
+        console.log(result);
         res.status(200).json({ tasksForToday: result });
     } catch (err) {
         console.error(err);
@@ -65,13 +66,15 @@ export const getTasksForToday = async (req, res) => {
 
 export const createTask = async (req, res) => {
     const { user_id } = req.params;
-    const { name, status, start_time,description, prioirty, end_time } = req.body;
+    const { name, status, start_time, description, priority, end_time } = req.body;
 
     try {
+        console.log(user_id, name, status, start_time, description, priority, end_time);
         const result = await sql.query(
-            'INSERT INTO tasks (user_id, name, description, status, start_time, prioirty, end_time) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [user_id, name, description, status, start_time, prioirty, end_time]
+            'INSERT INTO tasks (user_id, name, description, status, start_time, priority, end_time) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [user_id, name, description, status, start_time, priority, end_time]
         );
+        console.log(result);
         res.status(201).json({ task: result });
     } catch (err) {
         console.error(err);
@@ -105,5 +108,71 @@ export const deleteTask = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to delete task' });
+    }
+};
+
+// Get total vs completed tasks for past 10 days
+export const getPast10DaysData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(start_time, 'YYYY-MM-DD') AS name,
+                COUNT(*) AS total,
+                SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed
+             FROM tasks
+             WHERE start_time >= CURRENT_DATE - INTERVAL '10 days' AND user_id = $1
+             GROUP BY TO_CHAR(start_time, 'YYYY-MM-DD')
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch task stats for the past 10 days' });
+    }
+};
+
+// Get total vs completed tasks for past 10 weeks
+export const getPast10WeeksData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(DATE_TRUNC('week', start_time), 'YYYY-WW') AS name,
+                COUNT(*) AS total,
+                SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed
+             FROM tasks
+             WHERE start_time >= CURRENT_DATE - INTERVAL '10 weeks' AND user_id = $1
+             GROUP BY TO_CHAR(DATE_TRUNC('week', start_time), 'YYYY-WW')
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch task stats for the past 10 weeks' });
+    }
+};
+
+// Get total vs completed tasks for past 10 months
+export const getPast10MonthsData = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await sql.query(
+            `SELECT 
+                TO_CHAR(DATE_TRUNC('month', start_time), 'YYYY-MM') AS name,
+                COUNT(*) AS total,
+                SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed
+             FROM tasks
+             WHERE start_time >= CURRENT_DATE - INTERVAL '10 months' AND user_id = $1
+             GROUP BY TO_CHAR(DATE_TRUNC('month', start_time), 'YYYY-MM')
+             ORDER BY name ASC`,
+            [user_id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch task stats for the past 10 months' });
     }
 };

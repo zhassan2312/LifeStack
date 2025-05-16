@@ -16,7 +16,8 @@ import bodyParser from "body-parser";
 dotenv.config();
 const app = express();
 
-app.use(bodyParser.json()); 
+app.use(express.json()); 
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan('dev')); 
@@ -62,6 +63,7 @@ async function initDB() {
                 task_id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
                 name VARCHAR(255) NOT NULL,
+                description TEXT,
                 status VARCHAR(20) CHECK (status IN ('Pending', 'Completed')) DEFAULT 'Pending',
                 start_time TIMESTAMP NOT NULL,
                 priority VARCHAR(20) CHECK (priority IN ('Low', 'Medium', 'High')) DEFAULT 'Low', -- Fix the typo here

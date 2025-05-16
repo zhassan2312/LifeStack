@@ -16,7 +16,7 @@ const router=express.Router();
 router.get('/getCompletedProjectNumber', getCompletedProjectNumber);
 router.get('/getTotalProjectNumber', getTotalProjectNumber);
 router.get('/getPendingProjectNumber', getPendingProjectNumber);
-router.get('/getOngoingProjects', getOngoingProjects);
+router.get('/getOngoingProjects/:user_id', getOngoingProjects);
 router.post('/createProject', createProject);
 router.put('/updateProject/:id', updateProject);
 router.delete('/deleteProject/:id', deleteProject);
