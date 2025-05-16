@@ -3,6 +3,9 @@
 /* Light Theme */
 :root {
     --color-primary: #5051F9;
+    --color-primary-80: #5050f9cb;
+    --color-primary-10: #5050f950;
+    --color-primary-20: #5050f92a;
     --color-secondary-purple: #C9B3ED;
     --color-secondary-blue: #92BFFF;
     --color-secondary-indigo: #9F9FF8;
